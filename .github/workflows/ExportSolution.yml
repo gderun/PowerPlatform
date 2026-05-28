@@ -33,15 +33,15 @@ jobs:
             ref: ${{ github.event.inputs.source_branch }}
 
       - name: Install Power Platform Build Tools
-        uses: microsoft/powerplatform-actions/actions-install@v1
+        uses: microsoft/powerplatform-actions/actions-install@latest
 
       - name: Verify Service Connection
-        uses: microsoft/powerplatform-actions/whoAmI@v1
+        uses: microsoft/powerplatform-actions/who-am-i@latest
         with:
-          environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
           client-secret: ${{secrets.CLIENT_SECRET}}
           tenant-id: ${{secrets.TENANT_ID}}
+          environment-url: "${{ github.event.inputs.environment_url }}"
 
       # Commit changes to the existing or new branch
       - name: create new branch if specified
@@ -52,7 +52,7 @@ jobs:
             }
 
       - name: Export Unmanaged Solution
-        uses: microsoft/powerplatform-actions/export-solution@v1
+        uses: microsoft/powerplatform-actions/export-solution@latest
         with:
           environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
@@ -63,7 +63,7 @@ jobs:
           managed: false
 
       - name: Unpack Unmanaged Solution
-        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        uses: microsoft/powerplatform-actions/unpack-solution@latest
         with:
           solution-file: "${{ github.event.inputs.solution_name }}.zip"
           solution-folder: "${{ github.event.repository.name }}/src/${{ github.event.inputs.solution_name }}"
