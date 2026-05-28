@@ -1,0 +1,12 @@
+<botcomponent schemaname="cts_powerPlatformLicensingAdvisor.file.Microsoft-Copilot-Studio-Licensing-Guide-May-2026.pdf_vSe">
+  <componenttype>14</componenttype>
+  <description>This knowledge source provides detailed licensing information for Microsoft Copilot Studio (MCS), Copilot Studio agents, and related agent solutions across Power Platform, Microsoft 365 and Dynamics 365</description>
+  <filedata mimetype="application/pdf">Microsoft-Copilot-Studio-Licensing-Guide-May-2026.pdf</filedata>
+  <iscustomizable>0</iscustomizable>
+  <name>Microsoft-Copilot-Studio-Licensing-Guide-May-2026.pdf</name>
+  <parentbotid>
+    <schemaname>cts_powerPlatformLicensingAdvisor</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>
