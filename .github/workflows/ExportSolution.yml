@@ -40,10 +40,10 @@ jobs:
             ref: ${{ github.event.inputs.source_branch }}
 
       - name: Install Power Platform Build Tools
-        uses: microsoft/powerplatform-actions/actions-install@v0
+        uses: microsoft/powerplatform-actions/actions-install@latest
 
       - name: Verify Service Connection
-        uses: microsoft/powerplatform-actions/who-am-i@v0
+        uses: microsoft/powerplatform-actions/who-am-i@latest
         with:
           app-id: ${{secrets.CLIENT_ID}}
           client-secret: ${{secrets.CLIENT_SECRET}}
@@ -66,7 +66,7 @@ jobs:
           }
 
       - name: Export Unmanaged Solution
-        uses: microsoft/powerplatform-actions/export-solution@v0
+        uses: microsoft/powerplatform-actions/export-solution@latest
         with:
           environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
@@ -78,7 +78,7 @@ jobs:
           overwrite: true
 
       - name: Run Power Platform Checker
-        uses: microsoft/powerplatform-actions/check-solution@v0
+        uses: microsoft/powerplatform-actions/check-solution@latest
         with:
           environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
@@ -89,7 +89,7 @@ jobs:
           checker-logs-artifact-name: "CheckSolutionLogs"
 
       - name: Unpack Unmanaged Solution
-        uses: microsoft/powerplatform-actions/unpack-solution@v0
+        uses: microsoft/powerplatform-actions/unpack-solution@latest
         with:
           solution-file: "Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
           solution-folder: "src/${{ github.event.inputs.solution_name }}"
@@ -98,7 +98,7 @@ jobs:
           overwrite-files: true
 
       - name: Export Managed Solution
-        uses: microsoft/powerplatform-actions/export-solution@v0
+        uses: microsoft/powerplatform-actions/export-solution@latest
         with:
           environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
