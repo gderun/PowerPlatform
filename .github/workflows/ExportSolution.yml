@@ -100,8 +100,8 @@ jobs:
       - name: commit changes
         shell: pwsh
         run: |
-          git config user.name ${{ github.event.inputs.user_name }}
-          git config user.email ${{ github.event.inputs.user_email }}
+          git config user.name "Gerald de Run"
+          git config user.email "gderun@hotmail.com"
           git pull 
           git add --all
           git pull 
