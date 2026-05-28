@@ -3,8 +3,8 @@ run-name: Getting ${{ github.event.inputs.solution_name }} from pipelines host e
 on:
   workflow_dispatch:
     inputs:
-      artifact_url:
-        description: "The url of the Dataverse record ID for the artifact created by the pipelines (Example: https://[your-env].crm.dynamics.com/api/data/v9.0/deploymentartifacts([your-artifact-id])/artifactfile/$value)."
+      environment_url:
+        description: "The url of the Dataverse environment to export solution"
         required: true
       solution_name:
         description: "Name of the Solution in Dataverse environment"
@@ -32,9 +32,16 @@ jobs:
         with:
             ref: ${{ github.event.inputs.source_branch }}
 
-      # Install Power Platform Build Tools
-      - name: Install Power Platform Tools
+      - name: Install Power Platform Build Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Verify Service Connection
+        uses: microsoft/powerplatform-actions/whoAmI@v1
+        with:
+          environment-url: "${{ github.event.inputs.environment_url }}"
+          app-id: ${{secrets.CLIENT_ID}}
+          client-secret: ${{secrets.CLIENT_SECRET}}
+          tenant-id: ${{secrets.TENANT_ID}}
 
       # Commit changes to the existing or new branch
       - name: create new branch if specified
@@ -44,39 +51,18 @@ jobs:
                 git checkout -b ${{ github.event.inputs.target_branch }} ${{ github.event.inputs.source_branch }}
             }
 
-      # Export the solution from the artifact created by pipelines
-      - name: download solution from artifact
-        env:
-            CLIENT_ID: ${{secrets.CLIENT_ID}}   
-            TENANT_ID: ${{secrets.TENANT_ID}}   
-            CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-        shell: pwsh
-        run: |
-            $aadHost = "login.microsoftonline.com"
-            $url = "${{ github.event.inputs.artifact_url }}"
-            $options = [System.StringSplitOptions]::RemoveEmptyEntries
-            $dataverseHost = $url.Split("://", $options)[1].Split("/")[0]
+      - name: Export Unmanaged Solution
+        uses: microsoft/powerplatform-actions/export-solution@v1
+        with:
+          environment-url: "${{ github.event.inputs.environment_url }}"
+          app-id: ${{secrets.CLIENT_ID}}
+          client-secret: ${{secrets.CLIENT_SECRET}}
+          tenant-id: ${{secrets.TENANT_ID}}
+          solution-name: "${{ github.event.inputs.solution_name }}"
+          solution-output-file: "${{ github.event.inputs.solution_name }}.zip"
+          managed: false
 
-            $body = @{client_id = $env:CLIENT_ID; client_secret = $env:CLIENT_SECRET; grant_type = "client_credentials"; scope = "https://$dataverseHost/.default"; }
-            $OAuthReq = Invoke-RestMethod -Method Post -Uri "https://$aadHost/$env:TENANT_ID/oauth2/v2.0/token" -Body $body
-            $spnToken = $OAuthReq.access_token
-            $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-            $headers.Add("Authorization", "Bearer $spnToken")
-            $headers.Add("Content-Type", "application/json")
-
-            # Download the managed solution
-            $response = Invoke-RestMethod "${{ github.event.inputs.artifact_url }}" -Method 'GET' -Headers $headers
-            $bytes = [Convert]::FromBase64String($response.value)
-            [IO.File]::WriteAllBytes("${{ github.event.inputs.solution_name }}_managed.zip", $bytes)
-
-            # Download the unmanaged solution (for now we will need to use string manipulation to get the unmanaged solution URL, until the API provides this value)
-            $unmanaged_artifact_url = "${{ github.event.inputs.artifact_url }}".Replace("artifactfile", "artifactfileunmanaged")
-            $response = Invoke-RestMethod "$unmanaged_artifact_url" -Method 'GET' -Headers $headers
-            $bytes = [Convert]::FromBase64String($response.value)
-            [IO.File]::WriteAllBytes("${{ github.event.inputs.solution_name }}.zip", $bytes)
-
-      # Unpack the solution
-      - name: unpack solution
+      - name: Unpack Unmanaged Solution
         uses: microsoft/powerplatform-actions/unpack-solution@v1
         with:
           solution-file: "${{ github.event.inputs.solution_name }}.zip"
