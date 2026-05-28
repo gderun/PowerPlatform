@@ -40,7 +40,7 @@ jobs:
             ref: ${{ github.event.inputs.source_branch }}
 
       - name: Install Power Platform Build Tools
-        uses: microsoft/powerplatform-actions/actions-install@latest
+        uses: microsoft/powerplatform-actions/actions-install@v0
 
       - name: Verify Service Connection
         uses: microsoft/powerplatform-actions/who-am-i@v0
