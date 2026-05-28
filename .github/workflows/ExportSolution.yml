@@ -32,6 +32,10 @@ jobs:
         with:
             ref: ${{ github.event.inputs.source_branch }}
 
+      # Install Power Platform Build Tools
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+
       # Commit changes to the existing or new branch
       - name: create new branch if specified
         shell: pwsh
