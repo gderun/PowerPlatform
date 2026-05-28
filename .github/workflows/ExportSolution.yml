@@ -49,7 +49,7 @@ jobs:
           tenant-id: ${{secrets.TENANT_ID}}
           environment-url: "${{ github.event.inputs.environment_url }}"
 
-      - name: create or checkout git branch
+      - name: Create or Checkout branch ${{ github.event.inputs.target_branch }}
         shell: pwsh
         run: |
           $branchToFind = "${{ github.event.inputs.target_branch }}"
@@ -72,15 +72,15 @@ jobs:
           client-secret: ${{secrets.CLIENT_SECRET}}
           tenant-id: ${{secrets.TENANT_ID}}
           solution-name: "${{ github.event.inputs.solution_name }}"
-          solution-output-file: "${{ github.event.repository.name }}/Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
+          solution-output-file: "Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
           managed: false
           overwrite: true
 
       - name: Unpack Unmanaged Solution
         uses: microsoft/powerplatform-actions/unpack-solution@latest
         with:
-          solution-file: "${{ github.event.repository.name }}/Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
-          solution-folder: "${{ github.event.repository.name }}/src/${{ github.event.inputs.solution_name }}"
+          solution-file: "Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
+          solution-folder: "src/${{ github.event.inputs.solution_name }}"
           solution-type: 'Unmanaged'
           process-canvas-apps: true
           overwrite-files: true
@@ -93,11 +93,11 @@ jobs:
           client-secret: ${{secrets.CLIENT_SECRET}}
           tenant-id: ${{secrets.TENANT_ID}}
           solution-name: "${{ github.event.inputs.solution_name }}"
-          solution-output-file: "${{ github.event.repository.name }}/Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_managed.zip"
+          solution-output-file: "Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_managed.zip"
           managed: true
           overwrite: true
 
-      - name: commit changes
+      - name: Commit changes to branch ${{ github.event.inputs.target_branch }}
         shell: pwsh
         run: |
           git config user.name "Gerald de Run"
@@ -107,7 +107,7 @@ jobs:
           git pull 
           git commit -am "${{ github.event.inputs.commit_message }}" --allow-empty
 
-      - name: push to ${{ github.event.inputs.target_branch }}
+      - name: Push changes to branch ${{ github.event.inputs.target_branch }}
         shell: pwsh
         run: |
           git push origin ${{ github.event.inputs.target_branch }}
