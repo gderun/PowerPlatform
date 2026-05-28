@@ -21,6 +21,7 @@ on:
       source_branch:
         description: "Branch for the solution commit"
         required: true
+        default: main
       target_branch:
         description: "Branch to create for the solution commit"
         required: true
@@ -42,7 +43,7 @@ jobs:
         uses: microsoft/powerplatform-actions/actions-install@latest
 
       - name: Verify Service Connection
-        uses: microsoft/powerplatform-actions/who-am-i@latest
+        uses: microsoft/powerplatform-actions/who-am-i@v0
         with:
           app-id: ${{secrets.CLIENT_ID}}
           client-secret: ${{secrets.CLIENT_SECRET}}
@@ -65,7 +66,7 @@ jobs:
           }
 
       - name: Export Unmanaged Solution
-        uses: microsoft/powerplatform-actions/export-solution@latest
+        uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
@@ -76,8 +77,19 @@ jobs:
           managed: false
           overwrite: true
 
+      - name: Run Power Platform Checker
+        uses: microsoft/powerplatform-actions/check-solution@v0
+        with:
+          environment-url: "${{ github.event.inputs.environment_url }}"
+          app-id: ${{secrets.CLIENT_ID}}
+          client-secret: ${{secrets.CLIENT_SECRET}}
+          tenant-id: ${{secrets.TENANT_ID}}
+          path: "Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
+          geo: "australia"
+          checker-logs-artifact-name: "CheckSolutionLogs"
+
       - name: Unpack Unmanaged Solution
-        uses: microsoft/powerplatform-actions/unpack-solution@latest
+        uses: microsoft/powerplatform-actions/unpack-solution@v0
         with:
           solution-file: "Solutions/${{ github.event.inputs.solution_version }}/${{ github.event.inputs.solution_name }}_unmanaged.zip"
           solution-folder: "src/${{ github.event.inputs.solution_name }}"
@@ -86,7 +98,7 @@ jobs:
           overwrite-files: true
 
       - name: Export Managed Solution
-        uses: microsoft/powerplatform-actions/export-solution@latest
+        uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: "${{ github.event.inputs.environment_url }}"
           app-id: ${{secrets.CLIENT_ID}}
