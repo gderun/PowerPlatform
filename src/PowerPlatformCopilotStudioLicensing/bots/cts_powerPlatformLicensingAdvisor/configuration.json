@@ -1,0 +1,44 @@
+{
+  "$kind": "BotConfiguration",
+  "channels": [
+    {
+      "$kind": "ChannelDefinition",
+      "channelId": "MsTeams"
+    }
+  ],
+  "settings": {
+    "AnonymousAccessDisabled": true,
+    "GenerativeActionsEnabled": true,
+    "SmartTaskCompletionEnabled": false
+  },
+  "isAgentConnectable": true,
+  "publishOnImport": true,
+  "gPTSettings": {
+    "$kind": "GPTSettings",
+    "defaultSchemaName": "cts_powerPlatformLicensingAdvisor.gpt.default"
+  },
+  "isLightweightBot": false,
+  "aISettings": {
+    "$kind": "AISettings",
+    "useModelKnowledge": false,
+    "isFileAnalysisEnabled": false,
+    "isSemanticSearchEnabled": false,
+    "contentModeration": "Low",
+    "optInUseLatestModels": false,
+    "contentModerationOverrides": {
+      "$kind": "ContentModerationOverrides",
+      "allowHate": false,
+      "allowSelfHarm": false,
+      "allowSexual": false,
+      "allowViolence": false,
+      "diagnostics": []
+    }
+  },
+  "recognizer": {
+    "$kind": "GenerativeAIRecognizer"
+  },
+  "analyticsSettings": {
+    "$kind": "AnalyticsSettings",
+    "includeNodeLevelDetailsInTranscript": true
+  }
+}
