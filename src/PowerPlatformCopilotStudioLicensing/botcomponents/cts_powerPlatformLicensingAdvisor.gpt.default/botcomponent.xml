@@ -1,0 +1,11 @@
+<botcomponent schemaname="cts_powerPlatformLicensingAdvisor.gpt.default">
+  <componenttype>15</componenttype>
+  <description>Provides answers about Microsoft Power Platform and Copilot Studio licensing requirements and entitlements using latest monthly Power Platform Licensing Deck, Power Platform Licensing Guide, and Copilot Studio Licensing Guide downloaded from https://www.microsoft.com/en-us/licensing/product-licensing/power-platform</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Power Platform Copilot Studio Licensing</name>
+  <parentbotid>
+    <schemaname>cts_powerPlatformLicensingAdvisor</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>
